@@ -133,6 +133,7 @@
     <div class="score-container hidden" id="score-container">
       <h2>Your final score:</h2>
       <div id="score-percent"></div>
+      <div id="completion-count"></div>
     </div>
   </div>
 
@@ -828,7 +829,7 @@
   const scoreContainerEl     = document.getElementById('score-container');
   const scorePercentEl       = document.getElementById('score-percent');
   const questionsRemainingEl = document.getElementById('questions-remaining');
-
+const completionCountEl = document.getElementById('completion-count');
   /******************************************************
    * 4) INIT QUIZ
    ******************************************************/
@@ -1015,7 +1016,22 @@
   /******************************************************
    * 10) END QUIZ
    ******************************************************/
-  function endQuiz() {
+  async function updateCompletionCount() {
+  if (!completionCountEl) return;
+
+  const ns = 'lin313020-exam-quiz-test';
+  const key = 'anti-scam-completed';
+  const once = 'anti_scam_done_v1';
+
+  const url = localStorage.getItem(once)
+    ? `https://api.countapi.xyz/get/${ns}/${key}`
+    : (localStorage.setItem(once, '1'),
+       `https://api.countapi.xyz/hit/${ns}/${key}`);
+
+  const data = await (await fetch(url)).json();
+  completionCountEl.textContent = `Total completions: ${data.value}`;
+}
+    function endQuiz() {
     clearInterval(timerInterval);
     timerInterval = null;
     document.getElementById('quiz-layout').style.display = 'none';
@@ -1024,6 +1040,8 @@
     const finalScore = (userScore / selectedQuestions.length) * 100;
     scorePercentEl.textContent = finalScore.toFixed(2) + '%';
     scoreContainerEl.classList.remove('hidden');
+
+      updateCompletionCount();
   }
 
   /******************************************************
