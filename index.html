@@ -828,6 +828,7 @@
   const themeToggleBtn       = document.getElementById('theme-toggle');
   const scoreContainerEl     = document.getElementById('score-container');
   const scorePercentEl       = document.getElementById('score-percent');
+  const completionCountEl = document.getElementById('completion-count');
   const questionsRemainingEl = document.getElementById('questions-remaining');
 const completionCountEl = document.getElementById('completion-count');
   /******************************************************
@@ -1016,23 +1017,29 @@ const completionCountEl = document.getElementById('completion-count');
   /******************************************************
    * 10) END QUIZ
    ******************************************************/
-  async function updateCompletionCount() {
+ 
+    function updateCompletionCount() {
   if (!completionCountEl) return;
 
-   completionCountEl.textContent = 'Total completions: ...';
+  completionCountEl.textContent = 'Total completions: ...';
 
   const ns = 'lin313020-exam-quiz-test';
   const key = 'anti-scam-completed';
 
-  try {
-    const res = await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`);
-    const data = await res.json();
-
+  window.__countapi_cb = (data) => {
     completionCountEl.textContent = `Total completions: ${data.value}`;
-  } catch (e) {
+  };
+
+  const old = document.getElementById('countapi-script');
+  if (old) old.remove();
+
+  const s = document.createElement('script');
+  s.id = 'countapi-script';
+  s.src = `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?callback=__countapi_cb&_=${Date.now()}`;
+  s.onerror = () => {
     completionCountEl.textContent = 'Total completions: (unavailable)';
-    console.error('CountAPI error:', e);
-  }
+  };
+  document.body.appendChild(s);
 }
     function endQuiz() {
     clearInterval(timerInterval);
