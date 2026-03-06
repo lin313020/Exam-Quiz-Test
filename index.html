@@ -133,7 +133,9 @@
     <div class="score-container hidden" id="score-container">
       <h2>Your final score:</h2>
       <div id="score-percent"></div>
+      <div id="accuracy-line"></div>
       <div id="completion-count"></div>
+      <div id="overall-accuracy"></div>
     </div>
   </div>
 
@@ -815,6 +817,7 @@
   let userScore = 0; // partial scores for multiple-choice
   let timerInterval = null;
   let timeRemaining = 0;
+  let fullCorrect = 0;
 
   /******************************************************
    * 3) DOM ELEMENTS
@@ -828,14 +831,16 @@
   const themeToggleBtn       = document.getElementById('theme-toggle');
   const scoreContainerEl     = document.getElementById('score-container');
   const scorePercentEl       = document.getElementById('score-percent');
-  const completionCountEl = document.getElementById('completion-count');
+  const accuracyLineEl       = document.getElementById('accuracy-line');
+  const completionCountEl    = document.getElementById('completion-count');
+  const overallAccuracyEl = document.getElementById('overall-accuracy');
   const questionsRemainingEl = document.getElementById('questions-remaining');
-const completionCountEl = document.getElementById('completion-count');
   /******************************************************
    * 4) INIT QUIZ
    ******************************************************/
   window.addEventListener('DOMContentLoaded', () => {
     initQuiz();
+    fullCorrect = 0;
   });
 
   function initQuiz() {
@@ -957,6 +962,7 @@ const completionCountEl = document.getElementById('completion-count');
     // If user didn't pick anything wrong but missed some correct => partial
     fraction = userSet.size / correctSet.size;
     if (fraction === 1) {
+      fullCorrect++;
       showFeedback('correct', q, fraction);
     } else if (fraction > 0) {
       showFeedback('partial', q, fraction);
@@ -1017,14 +1023,41 @@ const completionCountEl = document.getElementById('completion-count');
   /******************************************************
    * 10) END QUIZ
    ******************************************************/
- 
+
+    function countapiJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cb = '__cap_' + Math.random().toString(36).slice(2);
+    window[cb] = (data) => {
+      resolve(data);
+      cleanup();
+    };
+
+    function cleanup() {
+      try { delete window[cb]; } catch (e) {}
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    const script = document.createElement('script');
+    const sep = url.includes('?') ? '&' : '?';
+    script.src = url + `${sep}callback=${cb}&_=${Date.now()}`;
+    script.onerror = () => { cleanup(); reject(new Error('countapi jsonp failed')); };
+
+    document.body.appendChild(script);
+  });
+}
+    
     function updateCompletionCount() {
-  if (!completionCountEl) return;
+  if (!completionCountEl) return false;
 
   completionCountEl.textContent = 'Total completions: ...';
 
   const ns = 'lin313020-exam-quiz-test';
   const key = 'anti-scam-completed';
+  const once = 'anti_scam_done_v1';
+
+  const endpoint = localStorage.getItem(once) ? 'get' : 'hit';
+  const didCount = (endpoint === 'hit');
+  if (didCount) localStorage.setItem(once, '1');
 
   window.__countapi_cb = (data) => {
     completionCountEl.textContent = `Total completions: ${data.value}`;
@@ -1035,24 +1068,67 @@ const completionCountEl = document.getElementById('completion-count');
 
   const s = document.createElement('script');
   s.id = 'countapi-script';
-  s.src = `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?callback=__countapi_cb&_=${Date.now()}`;
+  s.src = `https://api.countapi.xyz/${endpoint}/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?callback=__countapi_cb&_=${Date.now()}`;
   s.onerror = () => {
     completionCountEl.textContent = 'Total completions: (unavailable)';
   };
   document.body.appendChild(s);
+
+  return didCount;
 }
-    function endQuiz() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    document.getElementById('quiz-layout').style.display = 'none';
 
-    // Convert userScore to a final percentage
-    const finalScore = (userScore / selectedQuestions.length) * 100;
-    scorePercentEl.textContent = finalScore.toFixed(2) + '%';
-    scoreContainerEl.classList.remove('hidden');
+    async function updateOverallAccuracy(correctThisAttempt, totalThisAttempt, didCountThisAttempt) {
+  if (!overallAccuracyEl) return;
 
-      updateCompletionCount();
+  const ns = 'lin313020-exam-quiz-test';
+  const keyCorrect = 'anti-scam-total-correct';
+  const keyTotal = 'anti-scam-total-questions';
+
+  try {
+    if (didCountThisAttempt) {
+      await countapiJsonp(
+        `https://api.countapi.xyz/update/${encodeURIComponent(ns)}/${encodeURIComponent(keyCorrect)}?amount=${correctThisAttempt}`
+      );
+      await countapiJsonp(
+        `https://api.countapi.xyz/update/${encodeURIComponent(ns)}/${encodeURIComponent(keyTotal)}?amount=${totalThisAttempt}`
+      );
+    }
+    const correctAll = await countapiJsonp(
+      `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(keyCorrect)}`
+    );
+    const totalAll = await countapiJsonp(
+      `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(keyTotal)}`
+    );
+
+    const c = Number(correctAll.value || 0);
+    const t = Number(totalAll.value || 0);
+
+    overallAccuracyEl.textContent = t > 0
+      ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}%  (${c}/${t})`
+      : `Overall accuracy (all completions): ...`;
+  } catch (e) {
+    overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
   }
+}
+    
+function endQuiz() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  document.getElementById('quiz-layout').style.display = 'none';
+
+  const total = selectedQuestions.length;
+  const finalScore = (userScore / total) * 100;
+
+  scorePercentEl.textContent = finalScore.toFixed(2) + '%';
+
+  if (accuracyLineEl) {
+    accuracyLineEl.textContent = `Correct: ${fullCorrect}/${total}`;
+  }
+
+  scoreContainerEl.classList.remove('hidden');
+  const didCount = updateCompletionCount();
+  updateOverallAccuracy(fullCorrect, total, didCount);
+}
 
   /******************************************************
    * 11) TIMER
