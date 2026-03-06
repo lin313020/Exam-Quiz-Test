@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -386,93 +387,115 @@
       renderQuestion();
     });
 
+    
     /******************************************************
-     * 10) COUNTAPI (JSONP) + COMPLETIONS + OVERALL ACCURACY
+     * 10) COUNTERS (CounterAPI v1)
+     *     - Total completions
+     *     - Overall accuracy across all completions
      ******************************************************/
-    function countapiJsonp(url) {
+    const COUNTER_NS = 'lin313020.github.io';
+    const COUNTER_ACTION = 'anti-scam';
+
+    const KEY_COMPLETIONS   = 'completed';
+    const KEY_TOTAL_CORRECT = 'total-correct';
+    const KEY_TOTAL_QUEST   = 'total-questions';
+
+    // If you want each device to be counted only once, set this to true.
+    const COUNT_ONCE_PER_DEVICE = false;
+    const ONCE_FLAG_KEY = 'anti_scam_done_v3';
+
+    function counterApiUrl(key, params = '') {
+      // CounterAPI.com endpoint: https://counterapi.com/api/{ns}/{action}/{key}
+      const base = `https://counterapi.com/api/${encodeURIComponent(COUNTER_NS)}/${encodeURIComponent(COUNTER_ACTION)}/${encodeURIComponent(key)}`;
+      if (!params) return base;
+      return base + (params.startsWith('?') ? params : ('?' + params));
+    }
+
+    function jsonp(url) {
       return new Promise((resolve, reject) => {
-        const cb = '__cap_' + Math.random().toString(36).slice(2);
-
-        window[cb] = (data) => { resolve(data); cleanup(); };
-
+        const cb = '__capicb_' + Math.random().toString(36).slice(2);
         const script = document.createElement('script');
-        const sep = url.includes('?') ? '&' : '?';
-        script.src = url + `${sep}callback=${cb}&_=${Date.now()}`;
-        script.onerror = () => { cleanup(); reject(new Error('countapi jsonp failed')); };
+        script.async = true;
 
-        function cleanup() {
-          try { delete window[cb]; } catch (e) {}
-          if (script && script.parentNode) script.parentNode.removeChild(script);
-        }
+        window[cb] = (data) => {
+          try { delete window[cb]; } catch (e) { window[cb] = undefined; }
+          script.remove();
+          resolve(data);
+        };
+
+        const sep = url.includes('?') ? '&' : '?';
+        script.src = url + sep + 'callback=' + cb;
+
+        script.onerror = () => {
+          try { delete window[cb]; } catch (e) { window[cb] = undefined; }
+          script.remove();
+          reject(new Error('jsonp failed'));
+        };
 
         document.body.appendChild(script);
       });
     }
 
-    function updateCompletionCount() {
-      if (!completionCountEl) return false;
-
-      completionCountEl.textContent = 'Total completions: ...';
-
-      const ns = 'lin313020-exam-quiz-test';
-      const key = 'anti-scam-completed';
-      const once = 'anti_scam_done_v1';
-
-      const endpoint = localStorage.getItem(once) ? 'get' : 'hit';
-      const didCount = (endpoint === 'hit');
-      if (didCount) localStorage.setItem(once, '1');
-
-      window.__countapi_cb = (data) => {
-        completionCountEl.textContent = `Total completions: ${data.value}`;
-      };
-
-      const old = document.getElementById('countapi-script');
-      if (old) old.remove();
-
-      const s = document.createElement('script');
-      s.id = 'countapi-script';
-      s.src = `https://api.countapi.xyz/${endpoint}/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?callback=__countapi_cb&_=${Date.now()}`;
-      s.onerror = () => { completionCountEl.textContent = 'Total completions: (unavailable)'; };
-      document.body.appendChild(s);
-
-      return didCount;
+    async function counterGet(key) {
+      const url = counterApiUrl(key, 'readOnly=true');
+      const data = await jsonp(url);
+      return data; // { value: number, ... }
     }
 
-    async function hitMany(ns, key, n) {
-      if (n <= 0) return;
-      for (let i = 0; i < n; i++) {
-        await countapiJsonp(`https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`);
+    async function counterInc(key, times = 1) {
+      if (times <= 0) return;
+      const url = counterApiUrl(key); // increments by 1 per request
+      const CHUNK = 10;
+      for (let i = 0; i < times; i += CHUNK) {
+        const batch = Math.min(CHUNK, times - i);
+        await Promise.all(Array.from({ length: batch }, () => jsonp(url)));
       }
     }
 
-    async function updateOverallAccuracy(correctThisAttempt, totalThisAttempt, didCountThisAttempt) {
-      if (!overallAccuracyEl) return;
+    async function updateCounters(correctThisAttempt, totalThisAttempt) {
+      if (completionCountEl) completionCountEl.textContent = 'Total completions: ...';
+      if (overallAccuracyEl) overallAccuracyEl.textContent = 'Overall accuracy (all completions): ...';
 
-      const ns = 'lin313020-exam-quiz-test';
-      const keyCorrect = 'anti-scam-total-correct';
-      const keyTotal = 'anti-scam-total-questions';
+      let shouldCount = true;
+      if (COUNT_ONCE_PER_DEVICE) {
+        shouldCount = !localStorage.getItem(ONCE_FLAG_KEY);
+        if (shouldCount) localStorage.setItem(ONCE_FLAG_KEY, '1');
+      }
 
       try {
-        if (didCountThisAttempt) {
-          await hitMany(ns, keyCorrect, correctThisAttempt);
-          await hitMany(ns, keyTotal, totalThisAttempt);
+        if (shouldCount) {
+          await Promise.all([
+            counterInc(KEY_COMPLETIONS, 1),
+            counterInc(KEY_TOTAL_CORRECT, correctThisAttempt),
+            counterInc(KEY_TOTAL_QUEST, totalThisAttempt),
+          ]);
         }
 
-        const correctAll = await countapiJsonp(`https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(keyCorrect)}`);
-        const totalAll   = await countapiJsonp(`https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(keyTotal)}`);
+        const [completions, totalCorrect, totalQuest] = await Promise.all([
+          counterGet(KEY_COMPLETIONS),
+          counterGet(KEY_TOTAL_CORRECT),
+          counterGet(KEY_TOTAL_QUEST),
+        ]);
 
-        const c = Number(correctAll.value || 0);
-        const t = Number(totalAll.value || 0);
+        const cN = Number(completions?.value || 0);
+        const c  = Number(totalCorrect?.value || 0);
+        const t  = Number(totalQuest?.value || 0);
 
-        overallAccuracyEl.textContent = (t > 0)
-          ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}% (${c}/${t})`
-          : `Overall accuracy (all completions): ...`;
+        if (completionCountEl) completionCountEl.textContent = `Total completions: ${cN}`;
+
+        if (overallAccuracyEl) {
+          overallAccuracyEl.textContent = (t > 0)
+            ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}% (${c}/${t})`
+            : 'Overall accuracy (all completions): ...';
+        }
       } catch (e) {
-        overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
+        if (completionCountEl) completionCountEl.textContent = 'Total completions: (unavailable)';
+        if (overallAccuracyEl) overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
       }
     }
 
-    /******************************************************
+
+/******************************************************
      * 11) END QUIZ
      ******************************************************/
     function endQuiz() {
@@ -488,8 +511,7 @@
 
       scoreContainerEl.classList.remove('hidden');
 
-      const didCount = updateCompletionCount();
-      updateOverallAccuracy(fullCorrect, total, didCount);
+      updateCounters(fullCorrect, total);
     }
 
     /******************************************************
