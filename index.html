@@ -1,107 +1,34 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Quiz Exam Practice Tool</title>
   <style>
-    /* ========== BASIC STYLES ========== */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    header, .quiz-container, footer {
-      width: 100%;
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 10px;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    button {
-      cursor: pointer;
-      padding: 8px 16px;
-      margin: 6px 0;
-    }
-    .question {
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    .options {
-      margin: 10px 0;
-    }
-    .option-item {
-      margin: 5px 0;
-    }
-    .feedback {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 10px;
-      padding: 10px;
-      display: none;
-    }
-    /* feedback color states */
-    .feedback.correct {
-      background-color: #c8e6c9; /* Light green */
-    }
-    .feedback.incorrect {
-      background-color: #ffcdd2; /* Light red */
-    }
-    .feedback.partial {
-      background-color: #fff9c4; /* Light yellow */
-    }
-    #next-btn, #check-btn {
-      margin-right: 10px;
-    }
-    .hidden {
-      display: none;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; transition: background-color .3s, color .3s; }
+    header, .quiz-container, footer { width: 100%; max-width: 700px; margin: 0 auto; padding: 10px; }
+    header { display: flex; justify-content: space-between; align-items: center; }
+    button { cursor: pointer; padding: 8px 16px; margin: 6px 0; }
+    .question { font-weight: bold; margin-top: 20px; }
+    .options { margin: 10px 0; }
+    .option-item { margin: 5px 0; }
+    .feedback { text-align: center; font-weight: bold; margin-top: 10px; padding: 10px; display: none; }
+    .feedback.correct { background-color: #c8e6c9; }
+    .feedback.incorrect { background-color: #ffcdd2; }
+    .feedback.partial { background-color: #fff9c4; }
+    #next-btn, #check-btn { margin-right: 10px; }
+    .hidden { display: none; }
 
-    /* ========== THEME STYLES ========== */
-    .dark-mode {
-      background-color: #222;
-      color: #eee;
-    }
-    .dark-mode .feedback.correct {
-      background-color: #2e7d32;
-      color: #fff;
-    }
-    .dark-mode .feedback.incorrect {
-      background-color: #c62828;
-      color: #fff;
-    }
-    .dark-mode .feedback.partial {
-      background-color: #fbc02d;
-      color: #000;
-    }
+    .dark-mode { background-color: #222; color: #eee; }
+    .dark-mode .feedback.correct { background-color: #2e7d32; color: #fff; }
+    .dark-mode .feedback.incorrect { background-color: #c62828; color: #fff; }
+    .dark-mode .feedback.partial { background-color: #fbc02d; color: #000; }
 
-    /* ========== LAYOUT MIMIC ========== */
-    .quiz-layout {
-      border: 1px solid #ccc;
-      margin-top: 20px;
-      padding: 20px;
-    }
-    .top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .timer {
-      font-weight: bold;
-    }
-    .navigation-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-    }
-    .score-container {
-      text-align: center;
-      margin: 20px 0;
-    }
+    .quiz-layout { border: 1px solid #ccc; margin-top: 20px; padding: 20px; }
+    .top-row { display: flex; justify-content: space-between; align-items: center; }
+    .timer { font-weight: bold; }
+    .navigation-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+    .score-container { text-align: center; margin: 20px 0; }
   </style>
 </head>
 <body>
@@ -111,7 +38,6 @@
   </header>
 
   <div class="quiz-container">
-    <!-- The container for everything quiz-related -->
     <div class="quiz-layout" id="quiz-layout">
       <div class="top-row">
         <div class="timer" id="timer">Time: 00:00</div>
@@ -140,10 +66,14 @@
   </div>
 
   <footer>
-    <p style="text-align: center; margin: 20px 0;">Platform made with love by:</p>
-    <p style="text-align: center; margin: 20px 0;">&copy; 2025 Veljko Vuckovic @wljkov</p>
-
-    <p style="text-align: center; margin: 20px 0;">Disclaimer: This quiz platform is provided under the MIT License and is distributed on https://github.com/Refloow/Exam-Quiz-Test. “as is,” without any warranty. While this platform was developed by Veljko Vuckovic, the developer has no control over how it is used, nor any responsibility for the content (questions, answers, or other materials) that users create or share through this platform.</p>
+    <p style="text-align:center;margin:20px 0;">Platform made with love by:</p>
+    <p style="text-align:center;margin:20px 0;">&copy; 2025 Veljko Vuckovic @wljkov</p>
+    <p style="text-align:center;margin:20px 0;">
+      Disclaimer: This quiz platform is provided under the MIT License and is distributed on
+      https://github.com/Refloow/Exam-Quiz-Test. “as is,” without any warranty. While this platform was developed by Veljko
+      Vuckovic, the developer has no control over how it is used, nor any responsibility for the content (questions,
+      answers, or other materials) that users create or share through this platform.
+    </p>
   </footer>
 
   <script>
@@ -151,1009 +81,469 @@
      * 1) CONFIGURATION & QUESTION DATA (inlined)
      ******************************************************/
     const config = {
-      // total time in seconds
       totalTime: 300,
-      // how many questions to pick
       questionsToPick: 10
     };
 
-   const questionPool = [
-  {
-    "question": "What should you do if you receive an SMS with a “bank security alert” link? / 如果你收到短信说“银行安全警报”，并附带一个链接，你应该怎么做？",
-    "options": [
-      "A. Click the link immediately to “secure” your account / 立刻点击链接“保护账号”",
-      "B. Reply with your bank password to verify / 回复你的网银密码进行验证",
-      "C. Ignore the message and log in via the official app/website to check / 不点链接，改用官方App/官网登录核实",
-      "D. Forward the message to friends to warn them / 转发给朋友提醒他们"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which password practice is the safest for online accounts? / 以下哪种密码做法最安全？",
-    "options": [
-      "A. Use one password for all accounts / 所有账号用同一个密码",
-      "B. Use a long unique password and a password manager / 用长且独特的密码，并使用密码管理器",
-      "C. Use your birthday for easy memory / 用生日方便记",
-      "D. Share your password with a close friend / 和好朋友共享密码"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What should you do with your OTP (one-time password)? / 你应该如何处理 OTP（一次性验证码）？",
-    "options": [
-      "A. Share it if the caller says “I’m the bank” / 对方说是银行就给",
-      "B. Post it in a group chat for help / 发群里让大家帮忙看",
-      "C. Never share it with anyone / 绝不与任何人分享",
-      "D. Save it for later use / 保存起来以后再用"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which sign suggests a website may be fake (phishing)? / 以下哪个迹象可能说明网站是假的（钓鱼网站）？",
-    "options": [
-      "A. The URL is slightly misspelled (e.g., “mybnak.com”) / 网址拼写怪怪的（如 mybnak.com）",
-      "B. It pressures you with “act now” threats / 用“立刻操作否则封号”恐吓你",
-      "C. It asks for password/OTP on a link from SMS / 通过短信链接让你输入密码/OTP",
-      "D. All of the above / 以上都是"
-    ],
-    "correctAnswers": [
-      3
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is the safest action if a “bank officer” calls about suspicious transfers? / 如果“银行职员”来电说你有可疑转账，最安全的做法是？",
-    "options": [
-      "A. Stay on the line and follow instructions / 不挂电话照做",
-      "B. Hang up and call the bank using the official number / 挂断后用官方号码回拨银行",
-      "C. Give your account number + OTP to “freeze funds” / 给账号和OTP“冻结资金”",
-      "D. Install a remote-control app to “check security” / 安装远程控制软件“检查安全”"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Why is using public Wi-Fi for banking risky? / 为什么用公共 Wi-Fi 做网银操作有风险？",
-    "options": [
-      "A. Attackers can intercept data on insecure networks / 不安全网络可能被拦截数据",
-      "B. Fake “free Wi-Fi” hotspots can be scams / 可能连到假热点",
-      "C. You may forget to log out on shared devices / 容易忘记登出",
-      "D. All of the above / 以上都是"
-    ],
-    "correctAnswers": [
-      3
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which is a safe way to handle a “refund” message? / 收到“退款”消息时，哪种处理方式更安全？",
-    "options": [
-      "A. Click the refund link to fill your card details / 点退款链接填卡资料",
-      "B. Only process refunds inside the official app/platform / 只在官方App/平台内办理退款",
-      "C. Transfer “processing fees” to get the refund / 先转手续费才能退款",
-      "D. Share your banking login to speed things up / 把网银账号给对方加速"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which message is most likely a job scam? / 以下哪种更像兼职诈骗？",
-    "options": [
-      "A. “Easy job! Earn RM500/day. Pay a deposit to start.” / “轻松日赚RM500，先交押金入职”",
-      "B. “Interview scheduled via official HR email domain.” / “用公司官方邮箱安排面试”",
-      "C. “Salary details provided after formal contract.” / “签正式合同后提供薪资细节”",
-      "D. “Apply through company career website.” / “通过公司官网投递”"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What should you do before scanning a QR code from a poster? / 扫描海报上的二维码前，你应该先做什么？",
-    "options": [
-      "A. Scan first, think later / 先扫再说",
-      "B. Check if it’s from an official/verified source / 看是否来自官方或可信来源",
-      "C. Share it to friends to test / 先发给朋友试",
-      "D. Enter your bank details if asked / 若要求就填网银资料"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "If someone asks you to “borrow your bank account” to receive money, what is the risk? / 如果有人要“借用你的银行账户收钱”，风险是什么？",
-    "options": [
-      "A. No risk if you trust them / 信任就没风险",
-      "B. You could become a money mule and face legal trouble / 可能变成“跑分/人头户”，惹上法律问题",
-      "C. You will get free rewards / 会得到免费奖励",
-      "D. Banks encourage this / 银行鼓励这样做"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is “spoofing” in scams? / 诈骗里的 “spoofing（伪装）” 是指什么？",
-    "options": [
-      "A. Using a fake number/name to look official / 用假号码或假来电显示冒充官方",
-      "B. Using strong passwords / 使用强密码",
-      "C. Updating your phone / 更新手机系统",
-      "D. Using a locked screen / 锁屏"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which practice best protects your bank account? / 以下哪项最能保护你的网银账户？",
-    "options": [
-      "A. Enable 2FA and transaction alerts / 开启双重验证与交易提醒",
-      "B. Turn off notifications to reduce worry / 关闭通知不看",
-      "C. Keep your app outdated / 不更新App",
-      "D. Use “123456” for convenience / 用简单密码方便"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What should you do if you accidentally clicked a suspicious link? / 如果你不小心点了可疑链接，应该怎么做？",
-    "options": [
-      "A. Immediately enter your OTP to “cancel” / 立刻输入OTP“取消”",
-      "B. Close the page, don’t enter any info, run a security scan / 立刻关掉，不输入资料，做安全扫描",
-      "C. Share the link online / 把链接发上网",
-      "D. Ignore it and do nothing / 当作没事"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which is the safest way to contact customer support after a suspicious message? / 收到可疑信息后，联系“客服”最安全的方式是？",
-    "options": [
-      "A. Use the number provided in the message / 用短信里给的号码",
-      "B. Search the official website/app and contact from there / 去官网/官方App找联系方式",
-      "C. Reply to the scammer for clarification / 回复对方问清楚",
-      "D. Click the message link to chat / 点链接聊天"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which investment offer is most suspicious? / 以下哪种投资邀请最可疑？",
-    "options": [
-      "A. “Guaranteed high returns, no risk, withdraw anytime” / “稳赚高回报零风险随时提现”",
-      "B. A licensed platform with clear risk disclosure / 持牌平台并清楚披露风险",
-      "C. A product with audited reports / 有审计报告",
-      "D. Advisors who never ask for OTP/password / 顾问从不索要OTP/密码"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is a safe habit when receiving a delivery/parcel SMS? / 收到包裹短信时，什么习惯更安全？",
-    "options": [
-      "A. Pay fees through any link quickly / 赶紧点链接付款",
-      "B. Check tracking via the official courier app/website / 用快递官方App/官网查物流",
-      "C. Share your IC/passport photo to “confirm” / 发身份证/护照照片“确认”",
-      "D. Install an unknown app to track / 装陌生App追踪"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which detail should you avoid posting publicly to reduce scam risk? / 为了降低被骗风险，你应避免公开发布哪些信息？",
-    "options": [
-      "A. Full IC/passport number / 身份证/护照完整号码",
-      "B. Boarding pass / 登机牌",
-      "C. Bank card images / 银行卡照片",
-      "D. All of the above / 以上都是"
-    ],
-    "correctAnswers": [
-      3
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What’s a safe response to a “friend” asking for urgent money via chat? / 朋友在聊天软件里说“急用钱要你转账”，更安全的反应是？",
-    "options": [
-      "A. Transfer immediately to help / 立刻转账",
-      "B. Verify by calling them or using another channel / 换渠道（电话/当面）核实身份",
-      "C. Send your bank login so they can do it themselves / 把网银账号给他",
-      "D. Ask for their OTP / 向他要OTP"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Why are remote-control apps risky in “tech support” scams? / 为什么“技术支持”诈骗常让你装远程控制软件？",
-    "options": [
-      "A. They can control your phone and access sensitive info / 可能操控手机并获取敏感信息",
-      "B. They can guide you to approve transfers / 可能引导你确认转账",
-      "C. They can disable security warnings / 可能关闭安全提醒",
-      "D. All of the above / 以上都是"
-    ],
-    "correctAnswers": [
-      3
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is the best first step if you suspect you’ve been scammed? / 如果你怀疑自己被骗了，第一步最应该做什么？",
-    "options": [
-      "A. Keep quiet to avoid trouble / 不说，免得麻烦",
-      "B. Quickly contact your bank via official channels to freeze/secure accounts / 立刻用官方渠道联系银行处理账户安全",
-      "C. Send more money to “recover” losses / 再转一笔“追回损失”",
-      "D. Delete all chat records / 删除聊天记录"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "A website shows a padlock (HTTPS). Which statement is correct? / 网站显示“锁头”(HTTPS)。以下哪句正确？",
-    "options": [
-      "A. Padlock means the site is always genuine / 有锁头就一定是真网站",
-      "B. Padlock only means the connection is encrypted; the site can still be fake / 有锁头只代表加密，网站仍可能是假的",
-      "C. Padlock means the bank guarantees refunds / 有锁头银行就保证赔付",
-      "D. Padlock means the website is government-approved / 有锁头就是政府认证"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which is the BEST way to verify a link before logging in? / 在登录前，最好的核实链接方式是？",
-    "options": [
-      "A. Check the logo looks right / 看logo像不像",
-      "B. Check the URL domain carefully and type the official domain yourself / 仔细看域名，并自己手动输入官方域名",
-      "C. Ask the sender “is this real?” / 问发链接的人是不是假的",
-      "D. Click first, then decide / 先点进去再说"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "You receive multiple push notifications asking to “Approve login”. You didn’t log in. What should you do? / 你连续收到多次“是否批准登录”的推送，但你根本没登录。应当怎么做？",
-    "options": [
-      "A. Approve to stop notifications / 批准让它别再弹",
-      "B. Ignore; it will stop / 不管它",
-      "C. Deny all, then change password and review security settings / 全部拒绝，然后改密码并检查安全设置",
-      "D. Reply “STOP” / 回复STOP"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which situation is a strong sign of a SIM-swap scam? / 哪种情况很像“SIM卡被盗用/换卡”诈骗？",
-    "options": [
-      "A. Your phone suddenly has no signal; you also get account reset messages / 手机突然没信号，同时收到账号重置短信",
-      "B. Your battery runs out / 手机没电",
-      "C. Your phone is slow / 手机变卡",
-      "D. You forgot your Wi-Fi password / 忘了Wi-Fi密码"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "A “bank staff” asks you to read out a verification code “to cancel a transaction”. What’s the truth? / “银行人员”要你念出验证码，说是“取消交易”。真相更可能是？",
-    "options": [
-      "A. Reading OTP cancels transactions / 念OTP就能取消",
-      "B. OTP is used to authorize actions, not cancel them / OTP通常用于授权操作，不是取消",
-      "C. Banks always need OTP by phone / 银行电话一定会要OTP",
-      "D. It’s safe if the caller knows your name / 知道你名字就安全"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which email detail is MOST reliable for spotting phishing? / 识别钓鱼邮件时，最可靠的细节是？",
-    "options": [
-      "A. Sender display name / 发件人显示名",
-      "B. Email signature looks professional / 签名很正规",
-      "C. The actual sender domain and reply-to address / 实际发件域名与reply-to地址",
-      "D. The email uses polite language / 语气很礼貌"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "You are asked to install an app via an APK file because it’s “not available in the store yet”. What’s the safest choice? / 对方让你安装 APK（非应用商店），说“商店还没上架”。最安全选择是？",
-    "options": [
-      "A. Install it if many people use it / 很多人用就装",
-      "B. Install but don’t open it / 装了不打开",
-      "C. Don’t install; use official store only / 不安装，只用官方应用商店",
-      "D. Install and give it permissions / 安装并给权限"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "A QR code on a public poster might be risky because… / 公共海报上的二维码有风险，主要因为……",
-    "options": [
-      "A. QR codes can be replaced with sticker overlays / 二维码可能被贴纸覆盖替换",
-      "B. QR codes always contain viruses / 所有二维码都有病毒",
-      "C. QR codes are illegal / 二维码违法",
-      "D. QR codes make phones slower / 二维码会让手机变卡"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which permission is most suspicious for a “delivery tracking” app? / 对“快递查询”App来说，以下哪种权限最可疑？",
-    "options": [
-      "A. Internet access / 网络权限",
-      "B. Camera (to scan barcode) / 相机（扫码）",
-      "C. Accessibility Service / 无障碍服务权限",
-      "D. Notifications / 通知权限"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "You receive an “overpayment” from a buyer and they ask you to refund the extra via bank transfer. What’s the safest response? / 买家“多付钱”后要求你把多出来的部分转账退回。最安全做法？",
-    "options": [
-      "A. Refund immediately to be polite / 立刻退回",
-      "B. Refund after they send a screenshot / 看截图就退",
-      "C. Don’t refund outside the platform; contact the platform for dispute handling / 不私下退款，联系平台走纠纷流程",
-      "D. Send them your bank details to simplify / 发银行资料方便退"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which is a red flag in an “investment group chat”? / 投资群里哪种情况最危险？",
-    "options": [
-      "A. People share risks and losses openly / 会讨论风险与亏损",
-      "B. Admin discourages questions and urges “act now” / 管理员不让质疑、催你马上入金",
-      "C. The platform has transparent fees / 费用透明",
-      "D. No one promises returns / 不保证收益"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Someone claims they can “recover scammed money” if you pay a fee first. This is likely… / 有人说“先付手续费就能帮你追回被骗的钱”。这更可能是？",
-    "options": [
-      "A. Guaranteed recovery service / 一定能追回",
-      "B. A second scam (“recovery scam”) / 二次诈骗（追款诈骗）",
-      "C. Bank’s official process / 银行官方流程",
-      "D. Police instruction / 警方指示"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What’s the safest way to handle account recovery codes/backup codes? / 账户“备份码/恢复码”最安全的管理方式是？",
-    "options": [
-      "A. Screenshot and keep in photo album / 截图放相册",
-      "B. Share with a trusted friend / 给朋友保管",
-      "C. Store offline (printed) or in a secure password manager / 线下保存（打印）或放在可靠密码管理器",
-      "D. Post in private social media / 发在小号社媒"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "A caller claims to be “police” and tells you to transfer money to a “safe account”. Best action? / 来电自称“警察”，让你转账到“安全账户”。最佳做法？",
-    "options": [
-      "A. Transfer quickly to prove innocence / 赶紧转以自证清白",
-      "B. Stay on call and follow steps / 不挂电话照做",
-      "C. Hang up and verify via official police channels / 立刻挂断，用官方渠道核实",
-      "D. Give them your bank login so they can check / 给网银让他查"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which sign suggests a social media “verified” badge may not protect you? / 为什么“蓝V/认证标记”也未必安全？",
-    "options": [
-      "A. Badges can be faked or accounts can be hacked / 标记可能伪造，账号也可能被盗",
-      "B. Verified always means government / 认证就是政府",
-      "C. Verified accounts never post links / 认证号从不发链接",
-      "D. Verified blocks all scams / 认证会自动拦截诈骗"
-    ],
-    "correctAnswers": [
-      0
-    ],
-    "type": "single"
-  },
-  {
-    "question": "You get an OTP message but you didn’t request it. What does it MOST likely indicate? / 你收到 OTP 短信，但你没操作。最可能意味着？",
-    "options": [
-      "A. Bank is testing you / 银行在测试",
-      "B. Someone is trying to log in or reset your account / 有人正在尝试登录或重置账号",
-      "C. Your phone is broken / 手机坏了",
-      "D. It’s always spam with no risk / 都是垃圾信息无需理"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which is the safest behavior when you must use a shared/public computer? / 必须用公共电脑时，最安全的做法是？",
-    "options": [
-      "A. Log in to banking and save password / 登录网银并保存密码",
-      "B. Use incognito mode and still do banking / 用无痕模式就可以网银",
-      "C. Avoid sensitive logins; if unavoidable, log out fully and clear session / 尽量别做敏感登录；若必须，完整登出并清理会话",
-      "D. Leave the browser open to continue later / 浏览器开着下次继续"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "A scammer asks you to “verify your identity” by sending a selfie holding your ID. The risk is… / 对方要你“手持证件自拍验证”。风险是？",
-    "options": [
-      "A. No risk; it’s normal / 没风险，很正常",
-      "B. Your identity can be abused for account opening/loans / 身份可能被用于开户、借贷等冒用",
-      "C. It improves your credit / 会提高信用分",
-      "D. It speeds up refunds / 会加快退款"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which marketplace payment method is generally safer? / 二手平台/网购时，哪种付款方式通常更安全？",
-    "options": [
-      "A. Direct bank transfer to seller / 直接转账给卖家",
-      "B. Platform escrow/in-app payment with dispute support / 平台担保/平台内支付可申诉",
-      "C. Paying via unknown link / 点陌生链接付款",
-      "D. Sending card details in chat / 聊天里发卡号"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What’s a common trick in fake “bank app update” scams? / “银行App更新”诈骗常见套路是？",
-    "options": [
-      "A. Ask you to update only via official store / 只让你去官方商店更新",
-      "B. Send an APK link and request extra permissions / 发APK链接并要求大量权限",
-      "C. Remind you to enable 2FA / 提醒你开双重验证",
-      "D. Tell you to report suspicious calls / 叫你举报可疑电话"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which statement about “screen sharing” during support calls is correct? / 关于“共享屏幕/远程协助”，哪句正确？",
-    "options": [
-      "A. Safe if they sound professional / 说得专业就安全",
-      "B. Safe if it’s late night / 晚上更安全",
-      "C. Risky because they may see OTPs and guide you to approve transactions / 风险高，可能看到验证码并诱导你确认转账",
-      "D. Always required by banks / 银行一定会要求"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "A message says “Your account will be closed in 30 minutes unless you verify.” This is an example of… / 信息说“30分钟不验证就封号”。这属于？",
-    "options": [
-      "A. Normal compliance / 正常合规",
-      "B. Urgency + fear pressure tactic / 紧迫感+恐惧施压",
-      "C. Helpful reminder / 善意提醒",
-      "D. Security best practice / 安全最佳实践"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is the MOST secure way to receive important bank notifications? / 接收银行重要通知，哪种方式通常更安全？",
-    "options": [
-      "A. Random WhatsApp messages / WhatsApp陌生消息",
-      "B. Links from SMS / 短信链接",
-      "C. In-app secure inbox/notifications from the official app / 官方App内通知/站内信",
-      "D. Comments on social media / 社媒评论区"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which behavior reduces the chance of being targeted by “account takeover”? / 哪种做法能降低账号被盗风险？",
-    "options": [
-      "A. Reuse passwords / 重复用密码",
-      "B. Enable 2FA and avoid sharing OTP / 开双重验证并不分享OTP",
-      "C. Click login links from messages / 点消息里的登录链接",
-      "D. Turn off updates / 关闭更新"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "You see a “proof of payment” screenshot from the buyer, but you didn’t receive money. What should you trust? / 买家发“付款截图”，但你账户没到账。你应该相信什么？",
-    "options": [
-      "A. Screenshot / 截图",
-      "B. Their promise / 口头承诺",
-      "C. Your bank/app transaction record / 你的银行/平台真实到账记录",
-      "D. The chat history / 聊天记录"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which is a safer action if you suspect malware on your phone? / 怀疑手机中招（恶意软件）时，更安全的做法是？",
-    "options": [
-      "A. Keep using banking apps as usual / 照常用网银",
-      "B. Disconnect from the internet, run trusted security checks, and change passwords using a clean device / 断网、做可信安全检查，并用“干净设备”改密码",
-      "C. Install any “cleaner” app from ads / 随便装广告里的清理软件",
-      "D. Give remote access to “technician” / 给“技术员”远程"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which factor makes “deepfake voice/video” scams harder to detect? / “深度伪造语音/视频”诈骗更难识别的原因是？",
-    "options": [
-      "A. They always use poor quality / 画质一定很差",
-      "B. They can mimic a familiar voice and add urgency / 可能模仿熟人声音并制造紧迫感",
-      "C. They only happen on TV / 只会出现在电视",
-      "D. They can’t be used in calls / 不能用于电话"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is a secure way to verify a friend’s identity during an emergency request? / 当“朋友紧急求助要钱”时，安全的核实方式是？",
-    "options": [
-      "A. Ask them to send a selfie / 让他发自拍",
-      "B. Ask a question only the real person would know or call via another channel / 问只有本人知道的问题，或换渠道打电话核实",
-      "C. Trust the chat name / 看名字就行",
-      "D. Trust the profile picture / 看头像就行"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "What is the BEST practice to reduce phishing from autofill? / 为了减少“自动填充导致误填到假网站”的风险，最佳做法是？",
-    "options": [
-      "A. Enable autofill everywhere / 所有网站都开自动填",
-      "B. Only autofill after confirming the correct domain / 确认域名正确后再自动填",
-      "C. Share saved passwords across friends / 共享密码库",
-      "D. Save OTPs in notes / 把OTP存备忘录"
-    ],
-    "correctAnswers": [
-      1
-    ],
-    "type": "single"
-  },
-  {
-    "question": "Which response is safest when you’re pressured to keep the call secret (“Don’t tell anyone”)? / 对方要求你保密：“别告诉任何人”。最安全反应是？",
-    "options": [
-      "A. Keep it secret to avoid trouble / 保密避免麻烦",
-      "B. Continue the call and comply / 继续并照做",
-      "C. Treat it as a red flag, stop, and verify independently / 视为高危信号，停止并独立核实",
-      "D. Share your OTP quickly to finish / 快给OTP结束"
-    ],
-    "correctAnswers": [
-      2
-    ],
-    "type": "single"
-  }
-];
-  /******************************************************
-   * 2) GLOBAL STATE
-   ******************************************************/
-   let selectedQuestions = [];
-  let currentIndex = 0;
-  let userScore = 0; // partial scores for multiple-choice
-  let timerInterval = null;
-  let timeRemaining = 0;
-  let fullCorrect = 0;
+    const questionPool = [
+      {
+        "question": "What should you do if you receive an SMS with a “bank security alert” link? / 如果你收到短信说“银行安全警报”，并附带一个链接，你应该怎么做？",
+        "options": [
+          "A. Click the link immediately to “secure” your account / 立刻点击链接“保护账号”",
+          "B. Reply with your bank password to verify / 回复你的网银密码进行验证",
+          "C. Ignore the message and log in via the official app/website to check / 不点链接，改用官方App/官网登录核实",
+          "D. Forward the message to friends to warn them / 转发给朋友提醒他们"
+        ],
+        "correctAnswers": [2],
+        "type": "single"
+      },
+      {
+        "question": "Which password practice is the safest for online accounts? / 以下哪种密码做法最安全？",
+        "options": [
+          "A. Use one password for all accounts / 所有账号用同一个密码",
+          "B. Use a long unique password and a password manager / 用长且独特的密码，并使用密码管理器",
+          "C. Use your birthday for easy memory / 用生日方便记",
+          "D. Share your password with a close friend / 和好朋友共享密码"
+        ],
+        "correctAnswers": [1],
+        "type": "single"
+      },
+      {
+        "question": "What should you do with your OTP (one-time password)? / 你应该如何处理 OTP（一次性验证码）？",
+        "options": [
+          "A. Share it if the caller says “I’m the bank” / 对方说是银行就给",
+          "B. Post it in a group chat for help / 发群里让大家帮忙看",
+          "C. Never share it with anyone / 绝不与任何人分享",
+          "D. Save it for later use / 保存起来以后再用"
+        ],
+        "correctAnswers": [2],
+        "type": "single"
+      },
+      {
+        "question": "Which sign suggests a website may be fake (phishing)? / 以下哪个迹象可能说明网站是假的（钓鱼网站）？",
+        "options": [
+          "A. The URL is slightly misspelled (e.g., “mybnak.com”) / 网址拼写怪怪的（如 mybnak.com）",
+          "B. It pressures you with “act now” threats / 用“立刻操作否则封号”恐吓你",
+          "C. It asks for password/OTP on a link from SMS / 通过短信链接让你输入密码/OTP",
+          "D. All of the above / 以上都是"
+        ],
+        "correctAnswers": [3],
+        "type": "single"
+      },
+      {
+        "question": "What is the safest action if a “bank officer” calls about suspicious transfers? / 如果“银行职员”来电说你有可疑转账，最安全的做法是？",
+        "options": [
+          "A. Stay on the line and follow instructions / 不挂电话照做",
+          "B. Hang up and call the bank using the official number / 挂断后用官方号码回拨银行",
+          "C. Give your account number + OTP to “freeze funds” / 给账号和OTP“冻结资金”",
+          "D. Install a remote-control app to “check security” / 安装远程控制软件“检查安全”"
+        ],
+        "correctAnswers": [1],
+        "type": "single"
+      },
+      {
+        "question": "Why is using public Wi-Fi for banking risky? / 为什么用公共 Wi-Fi 做网银操作有风险？",
+        "options": [
+          "A. Attackers can intercept data on insecure networks / 不安全网络可能被拦截数据",
+          "B. Fake “free Wi-Fi” hotspots can be scams / 可能连到假热点",
+          "C. You may forget to log out on shared devices / 容易忘记登出",
+          "D. All of the above / 以上都是"
+        ],
+        "correctAnswers": [3],
+        "type": "single"
+      },
+      {
+        "question": "Which is a safe way to handle a “refund” message? / 收到“退款”消息时，哪种处理方式更安全？",
+        "options": [
+          "A. Click the refund link to fill your card details / 点退款链接填卡资料",
+          "B. Only process refunds inside the official app/platform / 只在官方App/平台内办理退款",
+          "C. Transfer “processing fees” to get the refund / 先转手续费才能退款",
+          "D. Share your banking login to speed things up / 把网银账号给对方加速"
+        ],
+        "correctAnswers": [1],
+        "type": "single"
+      },
+      {
+        "question": "Which message is most likely a job scam? / 以下哪种更像兼职诈骗？",
+        "options": [
+          "A. “Easy job! Earn RM500/day. Pay a deposit to start.” / “轻松日赚RM500，先交押金入职”",
+          "B. “Interview scheduled via official HR email domain.” / “用公司官方邮箱安排面试”",
+          "C. “Salary details provided after formal contract.” / “签正式合同后提供薪资细节”",
+          "D. “Apply through company career website.” / “通过公司官网投递”"
+        ],
+        "correctAnswers": [0],
+        "type": "single"
+      },
+      {
+        "question": "What should you do before scanning a QR code from a poster? / 扫描海报上的二维码前，你应该先做什么？",
+        "options": [
+          "A. Scan first, think later / 先扫再说",
+          "B. Check if it’s from an official/verified source / 看是否来自官方或可信来源",
+          "C. Share it to friends to test / 先发给朋友试",
+          "D. Enter your bank details if asked / 若要求就填网银资料"
+        ],
+        "correctAnswers": [1],
+        "type": "single"
+      },
+      {
+        "question": "If someone asks you to “borrow your bank account” to receive money, what is the risk? / 如果有人要“借用你的银行账户收钱”，风险是什么？",
+        "options": [
+          "A. No risk if you trust them / 信任就没风险",
+          "B. You could become a money mule and face legal trouble / 可能变成“跑分/人头户”，惹上法律问题",
+          "C. You will get free rewards / 会得到免费奖励",
+          "D. Banks encourage this / 银行鼓励这样做"
+        ],
+        "correctAnswers": [1],
+        "type": "single"
+      }
+      // 你可以把你剩下的题继续粘贴到这里（保持同样格式）
+    ];
 
-  /******************************************************
-   * 3) DOM ELEMENTS
-   ******************************************************/
-  const timerEl              = document.getElementById('timer');
-  const questionTextEl       = document.getElementById('question-text');
-  const optionsContainerEl   = document.getElementById('options-container');
-  const feedbackEl           = document.getElementById('feedback');
-  const nextBtn              = document.getElementById('next-btn');
-  const checkBtn             = document.getElementById('check-btn');
-  const themeToggleBtn       = document.getElementById('theme-toggle');
-  const scoreContainerEl     = document.getElementById('score-container');
-  const scorePercentEl       = document.getElementById('score-percent');
-  const accuracyLineEl       = document.getElementById('accuracy-line');
-  const completionCountEl    = document.getElementById('completion-count');
-  const overallAccuracyEl = document.getElementById('overall-accuracy');
-  const questionsRemainingEl = document.getElementById('questions-remaining');
-  /******************************************************
-   * 4) INIT QUIZ
-   ******************************************************/
-  window.addEventListener('DOMContentLoaded', () => {
-    initQuiz();
-    fullCorrect = 0;
-  });
+    /******************************************************
+     * 2) GLOBAL STATE
+     ******************************************************/
+    let selectedQuestions = [];
+    let currentIndex = 0;
+    let userScore = 0;
+    let timerInterval = null;
+    let timeRemaining = 0;
+    let fullCorrect = 0;
 
-  function initQuiz() {
-    // Shuffle and pick N questions
-    const shuffled = questionPool.sort(() => Math.random() - 0.5);
-    selectedQuestions = shuffled.slice(0, config.questionsToPick);
+    /******************************************************
+     * 3) DOM ELEMENTS
+     ******************************************************/
+    const timerEl              = document.getElementById('timer');
+    const questionTextEl       = document.getElementById('question-text');
+    const optionsContainerEl   = document.getElementById('options-container');
+    const feedbackEl           = document.getElementById('feedback');
+    const nextBtn              = document.getElementById('next-btn');
+    const checkBtn             = document.getElementById('check-btn');
+    const themeToggleBtn       = document.getElementById('theme-toggle');
+    const scoreContainerEl     = document.getElementById('score-container');
+    const scorePercentEl       = document.getElementById('score-percent');
+    const accuracyLineEl       = document.getElementById('accuracy-line');
+    const completionCountEl    = document.getElementById('completion-count');
+    const overallAccuracyEl    = document.getElementById('overall-accuracy');
+    const questionsRemainingEl = document.getElementById('questions-remaining');
 
-    // Reset state
-    currentIndex = 0;
-    userScore = 0;
-    timeRemaining = config.totalTime;
-    feedbackEl.style.display = 'none';
-    nextBtn.classList.add('hidden');
-    checkBtn.classList.remove('hidden');
-    scoreContainerEl.classList.add('hidden');
-    document.getElementById('quiz-layout').style.display = 'block';
-
-    // Start timer
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(updateTimer, 1000);
-
-    // Render first question
-    renderQuestion();
-  }
-
-  /******************************************************
-   * 5) HELPER: FORMAT TEXT FOR HTML
-   ******************************************************/
-  function formatTextForHTML(str) {
-    // 1) Escape < and > so they're shown as text
-    let safe = str
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    // 2) Replace code blocks: ``` some code ```
-    safe = safe.replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>');
-
-    // 3) Convert newlines to <br/>
-    safe = safe.replace(/\n/g, '<br/>');
-
-    return safe;
-  }
-
-  /******************************************************
-   * 6) RENDER QUESTION
-   ******************************************************/
-  function renderQuestion() {
-    const q = selectedQuestions[currentIndex];
-
-    // Use formatTextForHTML for the question
-    questionTextEl.innerHTML = formatTextForHTML(q.question);
-
-    optionsContainerEl.innerHTML = '';
-    feedbackEl.textContent = '';
-    feedbackEl.style.display = 'none';
-    feedbackEl.className = 'feedback'; // reset classes
-
-    // Single-choice => radio, multiple => checkbox
-    const inputType = (q.type === 'single') ? 'radio' : 'checkbox';
-
-    // === RANDOMIZE ANSWERS BY SHUFFLING THE OPTIONS ===
-    const shuffledOptions = q.options
-      .map((optionText, originalIndex) => ({ 
-        text: optionText, 
-        index: originalIndex 
-      }))
-
-    // Now loop over the shuffled list to build UI
-    shuffledOptions.forEach(({ text, index }) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'option-item';
-
-      const input = document.createElement('input');
-      input.type = inputType;
-      input.name = 'quizOption_' + currentIndex; // group name
-      // IMPORTANT: set the value to the *original* index
-      input.value = index; 
-
-      // Use the same function for options so code blocks appear properly
-      const label = document.createElement('label');
-      label.innerHTML = formatTextForHTML(text);
-
-      wrapper.appendChild(input);
-      wrapper.appendChild(label);
-      optionsContainerEl.appendChild(wrapper);
+    /******************************************************
+     * 4) INIT QUIZ
+     ******************************************************/
+    window.addEventListener('DOMContentLoaded', () => {
+      initQuiz();
     });
 
-    // Update "questions remaining"
-    questionsRemainingEl.textContent = (selectedQuestions.length - currentIndex);
-  }
+    function initQuiz() {
+      fullCorrect = 0;
 
-  /******************************************************
-   * 7) CHECK ANSWER
-   ******************************************************/
-  checkBtn.addEventListener('click', () => {
-    const q = selectedQuestions[currentIndex];
-    const inputs = [...optionsContainerEl.querySelectorAll('input')];
-    
-    // Indices that the user checked
-    const checkedIndices = inputs
-      .filter(inp => inp.checked)
-      .map(inp => parseInt(inp.value));
+      const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+      selectedQuestions = shuffled.slice(0, Math.min(config.questionsToPick, shuffled.length));
 
-    // Evaluate correctness
-    const correctSet = new Set(q.correctAnswers);
-    const userSet = new Set(checkedIndices);
+      currentIndex = 0;
+      userScore = 0;
+      timeRemaining = config.totalTime;
 
-    // If user selected any *incorrect* => 0
-    let fraction = 0;
-    for (let val of userSet) {
-      if (!correctSet.has(val)) {
-        fraction = 0;
+      feedbackEl.style.display = 'none';
+      nextBtn.classList.add('hidden');
+      checkBtn.classList.remove('hidden');
+      scoreContainerEl.classList.add('hidden');
+      document.getElementById('quiz-layout').style.display = 'block';
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 1000);
+
+      renderQuestion();
+    }
+
+    /******************************************************
+     * 5) HELPER: FORMAT TEXT FOR HTML
+     ******************************************************/
+    function formatTextForHTML(str) {
+      let safe = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      safe = safe.replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>');
+      safe = safe.replace(/\n/g, '<br/>');
+      return safe;
+    }
+
+    /******************************************************
+     * 6) RENDER QUESTION
+     ******************************************************/
+    function renderQuestion() {
+      const q = selectedQuestions[currentIndex];
+
+      questionTextEl.innerHTML = formatTextForHTML(q.question);
+
+      optionsContainerEl.innerHTML = '';
+      feedbackEl.textContent = '';
+      feedbackEl.style.display = 'none';
+      feedbackEl.className = 'feedback';
+
+      const inputType = (q.type === 'single') ? 'radio' : 'checkbox';
+
+      // Keep A/B/C/D order (no shuffle)
+      const orderedOptions = q.options
+        .map((optionText, originalIndex) => ({
+          text: optionText,
+          index: originalIndex
+        }));
+
+      orderedOptions.forEach(({ text, index }) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'option-item';
+
+        const input = document.createElement('input');
+        input.type = inputType;
+        input.name = 'quizOption_' + currentIndex;
+        input.value = index;
+
+        const label = document.createElement('label');
+        label.innerHTML = formatTextForHTML(text);
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(label);
+        optionsContainerEl.appendChild(wrapper);
+      });
+
+      questionsRemainingEl.textContent = (selectedQuestions.length - currentIndex);
+    }
+
+    /******************************************************
+     * 7) CHECK ANSWER
+     ******************************************************/
+    checkBtn.addEventListener('click', () => {
+      const q = selectedQuestions[currentIndex];
+      const inputs = [...optionsContainerEl.querySelectorAll('input')];
+
+      const checkedIndices = inputs
+        .filter(inp => inp.checked)
+        .map(inp => parseInt(inp.value, 10));
+
+      const correctSet = new Set(q.correctAnswers);
+      const userSet = new Set(checkedIndices);
+
+      let fraction = 0;
+
+      for (let val of userSet) {
+        if (!correctSet.has(val)) {
+          fraction = 0;
+          showFeedback('incorrect', q, fraction);
+          return;
+        }
+      }
+
+      fraction = userSet.size / correctSet.size;
+
+      if (fraction === 1) {
+        fullCorrect++;
+        showFeedback('correct', q, fraction);
+      } else if (fraction > 0) {
+        showFeedback('partial', q, fraction);
+      } else {
         showFeedback('incorrect', q, fraction);
-        userScore += 0;
+      }
+
+      userScore += fraction;
+    });
+
+    /******************************************************
+     * 8) SHOW FEEDBACK
+     ******************************************************/
+    function showFeedback(status, question, fraction) {
+      feedbackEl.style.display = 'block';
+
+      const escapeHTML = (str) => str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      const correctAnswersText = question.correctAnswers
+        .map(idx => escapeHTML(question.options[idx]))
+        .join(', ');
+
+      if (status === 'correct') {
+        feedbackEl.classList.add('correct');
+        feedbackEl.innerHTML = 'Correct!';
+      } else if (status === 'partial') {
+        feedbackEl.classList.add('partial');
+        const percent = (fraction * 100).toFixed(0);
+        feedbackEl.innerHTML = `Partially correct (${percent}%).<br/>Correct answers: ${correctAnswersText}`;
+      } else {
+        feedbackEl.classList.add('incorrect');
+        feedbackEl.innerHTML = `Incorrect!<br/>Correct answers: ${correctAnswersText}`;
+      }
+
+      checkBtn.classList.add('hidden');
+      nextBtn.classList.remove('hidden');
+    }
+
+    /******************************************************
+     * 9) NEXT QUESTION
+     ******************************************************/
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex >= selectedQuestions.length) {
+        endQuiz();
         return;
+      }
+      nextBtn.classList.add('hidden');
+      checkBtn.classList.remove('hidden');
+      renderQuestion();
+    });
+
+    /******************************************************
+     * 10) COUNTERS (CounterAPI via robust JSONP)
+     ******************************************************/
+    const COUNTER_NS = 'lin313020.github.io';
+    const COUNTER_ACTION = 'anti-scam';
+
+    const KEY_COMPLETIONS   = 'completed';
+    const KEY_TOTAL_CORRECT = 'total-correct';
+    const KEY_TOTAL_QUEST   = 'total-questions';
+
+    const COUNT_ONCE_PER_DEVICE = false;
+    const ONCE_FLAG_KEY = 'anti_scam_done_v6';
+
+    function counterApiUrl(key, params = '') {
+      const base = `https://counterapi.com/api/${encodeURIComponent(COUNTER_NS)}/${encodeURIComponent(COUNTER_ACTION)}/${encodeURIComponent(key)}`;
+      if (!params) return base;
+      return base + (params.startsWith('?') ? params : ('?' + params));
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function jsonp(url, timeoutMs = 10000) {
+      return new Promise((resolve, reject) => {
+        const cb = '__capicb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+        const script = document.createElement('script');
+        let done = false;
+
+        function cleanup() {
+          if (done) return;
+          done = true;
+          try { delete window[cb]; } catch (e) { window[cb] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        const timer = setTimeout(() => {
+          cleanup();
+          reject(new Error('CounterAPI timeout'));
+        }, timeoutMs);
+
+        window[cb] = (data) => {
+          clearTimeout(timer);
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = () => {
+          clearTimeout(timer);
+          cleanup();
+          reject(new Error('CounterAPI JSONP request failed'));
+        };
+
+        const sep = url.includes('?') ? '&' : '?';
+        script.src = url + sep + 'callback=' + encodeURIComponent(cb) + '&_=' + Date.now();
+        script.async = true;
+        document.head.appendChild(script);
+      });
+    }
+
+    async function counterGet(key) {
+      const url = counterApiUrl(key, 'readOnly=true');
+      return await jsonp(url);
+    }
+
+    async function counterInc(key, times = 1) {
+      if (times <= 0) return;
+      const url = counterApiUrl(key);
+
+      for (let i = 0; i < times; i++) {
+        await jsonp(url);
+        await delay(80);
       }
     }
 
-    // If user didn't pick anything wrong but missed some correct => partial
-    fraction = userSet.size / correctSet.size;
-    if (fraction === 1) {
-      fullCorrect++;
-      showFeedback('correct', q, fraction);
-    } else if (fraction > 0) {
-      showFeedback('partial', q, fraction);
-    } else {
-      showFeedback('incorrect', q, fraction);
-    }
-    userScore += fraction;
-  });
+    async function updateCounters(correctThisAttempt, totalThisAttempt) {
+      if (completionCountEl) completionCountEl.textContent = 'Total completions: ...';
+      if (overallAccuracyEl) overallAccuracyEl.textContent = 'Overall accuracy (all completions): ...';
 
-  /******************************************************
-   * 8) SHOW FEEDBACK
-   ******************************************************/
-  function showFeedback(status, question, fraction) {
-    feedbackEl.style.display = 'block';
+      let shouldCount = true;
+      if (COUNT_ONCE_PER_DEVICE) {
+        shouldCount = !localStorage.getItem(ONCE_FLAG_KEY);
+        if (shouldCount) localStorage.setItem(ONCE_FLAG_KEY, '1');
+      }
 
-    // For the "correct answers" portion, we might just show them as text:
-    const escapeHTML = (str) =>
-      str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      if (shouldCount) {
+        try {
+          await counterInc(KEY_COMPLETIONS, 1);
+          await counterInc(KEY_TOTAL_CORRECT, correctThisAttempt);
+          await counterInc(KEY_TOTAL_QUEST, totalThisAttempt);
+        } catch (e) {
+          console.error('Counter write failed:', e);
+        }
+      }
 
-    // Build correct answer string
-    const correctAnswersText = question.correctAnswers
-      .map(idx => escapeHTML(question.options[idx]))
-      .join(', ');
+      try {
+        const [completions, totalCorrect, totalQuest] = await Promise.all([
+          counterGet(KEY_COMPLETIONS),
+          counterGet(KEY_TOTAL_CORRECT),
+          counterGet(KEY_TOTAL_QUEST),
+        ]);
 
-    if (status === 'correct') {
-      feedbackEl.classList.add('correct');
-      feedbackEl.innerHTML = 'Correct!';
-    } else if (status === 'partial') {
-      feedbackEl.classList.add('partial');
-      const percent = (fraction * 100).toFixed(0);
-      feedbackEl.innerHTML = `Partially correct (${percent}%).<br/>
-        Correct answers: ${correctAnswersText}`;
-    } else {
-      feedbackEl.classList.add('incorrect');
-      feedbackEl.innerHTML = `Incorrect!<br/>
-        Correct answers: ${correctAnswersText}`;
-    }
+        const cN = Number(completions?.value || 0);
+        const c  = Number(totalCorrect?.value || 0);
+        const t  = Number(totalQuest?.value || 0);
 
-    // Hide check button, show next
-    checkBtn.classList.add('hidden');
-    nextBtn.classList.remove('hidden');
-  }
+        if (completionCountEl) completionCountEl.textContent = `Total completions: ${cN}`;
 
-  /******************************************************
-   * 9) NEXT QUESTION
-   ******************************************************/
-  nextBtn.addEventListener('click', () => {
-    currentIndex++;
-    if (currentIndex >= selectedQuestions.length) {
-      endQuiz();
-      return;
-    }
-    nextBtn.classList.add('hidden');
-    checkBtn.classList.remove('hidden');
-    renderQuestion();
-  });
-
-  /******************************************************
-   * 10) END QUIZ
-   ******************************************************/
-
-    function countapiJsonp(url) {
-  return new Promise((resolve, reject) => {
-    const cb = '__cap_' + Math.random().toString(36).slice(2);
-    window[cb] = (data) => {
-      resolve(data);
-      cleanup();
-    };
-
-    function cleanup() {
-      try { delete window[cb]; } catch (e) {}
-      if (script && script.parentNode) script.parentNode.removeChild(script);
+        if (overallAccuracyEl) {
+          overallAccuracyEl.textContent = (t > 0)
+            ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}% (${c}/${t})`
+            : 'Overall accuracy (all completions): 0.00% (0/0)';
+        }
+      } catch (e) {
+        console.error('Counter read failed:', e);
+        if (completionCountEl) completionCountEl.textContent = 'Total completions: (unavailable)';
+        if (overallAccuracyEl) overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
+      }
     }
 
-    const script = document.createElement('script');
-    const sep = url.includes('?') ? '&' : '?';
-    script.src = url + `${sep}callback=${cb}&_=${Date.now()}`;
-    script.onerror = () => { cleanup(); reject(new Error('countapi jsonp failed')); };
+    /******************************************************
+     * 11) END QUIZ
+     ******************************************************/
+    function endQuiz() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('quiz-layout').style.display = 'none';
 
-    document.body.appendChild(script);
-  });
-}
-    
-    function updateCompletionCount() {
-  if (!completionCountEl) return false;
+      const total = selectedQuestions.length;
+      const finalScore = (userScore / total) * 100;
 
-  completionCountEl.textContent = 'Total completions: ...';
+      scorePercentEl.textContent = finalScore.toFixed(2) + '%';
+      if (accuracyLineEl) accuracyLineEl.textContent = `Correct: ${fullCorrect}/${total}`;
 
-  const ns = 'lin313020-exam-quiz-test';
-  const key = 'anti-scam-completed';
-  const once = 'anti_scam_done_v1';
+      scoreContainerEl.classList.remove('hidden');
 
-  const endpoint = localStorage.getItem(once) ? 'get' : 'hit';
-  const didCount = (endpoint === 'hit');
-  if (didCount) localStorage.setItem(once, '1');
-
-  window.__countapi_cb = (data) => {
-    completionCountEl.textContent = `Total completions: ${data.value}`;
-  };
-
-  const old = document.getElementById('countapi-script');
-  if (old) old.remove();
-
-  const s = document.createElement('script');
-  s.id = 'countapi-script';
-  s.src = `https://api.countapi.xyz/${endpoint}/${encodeURIComponent(ns)}/${encodeURIComponent(key)}?callback=__countapi_cb&_=${Date.now()}`;
-  s.onerror = () => {
-    completionCountEl.textContent = 'Total completions: (unavailable)';
-  };
-  document.body.appendChild(s);
-
-  return didCount;
-}
-
-    async function updateOverallAccuracy(correctThisAttempt, totalThisAttempt, didCountThisAttempt) {
-  if (!overallAccuracyEl) return;
-
-  const ns = 'lin313020-exam-quiz-test';
-  const keyCorrect = 'anti-scam-total-correct';
-  const keyTotal = 'anti-scam-total-questions';
-
-  try {
-    if (didCountThisAttempt) {
-      await countapiJsonp(
-        `https://api.countapi.xyz/update/${encodeURIComponent(ns)}/${encodeURIComponent(keyCorrect)}?amount=${correctThisAttempt}`
-      );
-      await countapiJsonp(
-        `https://api.countapi.xyz/update/${encodeURIComponent(ns)}/${encodeURIComponent(keyTotal)}?amount=${totalThisAttempt}`
-      );
+      updateCounters(fullCorrect, total);
     }
-    const correctAll = await countapiJsonp(
-      `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(keyCorrect)}`
-    );
-    const totalAll = await countapiJsonp(
-      `https://api.countapi.xyz/get/${encodeURIComponent(ns)}/${encodeURIComponent(keyTotal)}`
-    );
 
-    const c = Number(correctAll.value || 0);
-    const t = Number(totalAll.value || 0);
-
-    overallAccuracyEl.textContent = t > 0
-      ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}%  (${c}/${t})`
-      : `Overall accuracy (all completions): ...`;
-  } catch (e) {
-    overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
-  }
-}
-    
-function endQuiz() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-  document.getElementById('quiz-layout').style.display = 'none';
-
-  const total = selectedQuestions.length;
-  const finalScore = (userScore / total) * 100;
-
-  scorePercentEl.textContent = finalScore.toFixed(2) + '%';
-
-  if (accuracyLineEl) {
-    accuracyLineEl.textContent = `Correct: ${fullCorrect}/${total}`;
-  }
-
-  scoreContainerEl.classList.remove('hidden');
-  const didCount = updateCompletionCount();
-  updateOverallAccuracy(fullCorrect, total, didCount);
-}
-
-  /******************************************************
-   * 11) TIMER
-   ******************************************************/
-  function updateTimer() {
-    if (timeRemaining <= 0) {
-      endQuiz();
-      return;
+    /******************************************************
+     * 12) TIMER
+     ******************************************************/
+    function updateTimer() {
+      if (timeRemaining <= 0) { endQuiz(); return; }
+      timeRemaining--;
+      const minutes = Math.floor(timeRemaining / 60);
+      let seconds = timeRemaining % 60;
+      if (seconds < 10) seconds = '0' + seconds;
+      timerEl.textContent = `Time: ${minutes}:${seconds}`;
     }
-    timeRemaining--;
-    let minutes = Math.floor(timeRemaining / 60);
-    let seconds = timeRemaining % 60;
-    if (seconds < 10) seconds = '0' + seconds;
-    timerEl.textContent = `Time: ${minutes}:${seconds}`;
-  }
 
-  /******************************************************
-   * 12) THEME TOGGLE
-   ******************************************************/
-  themeToggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-  });
-
-    
+    /******************************************************
+     * 13) THEME TOGGLE
+     ******************************************************/
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
   </script>
-  
 </body>
 </html>
