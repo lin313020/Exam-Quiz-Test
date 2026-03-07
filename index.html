@@ -4,30 +4,120 @@
   <meta charset="UTF-8" />
   <title>Quiz Exam Practice Tool</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; transition: background-color .3s, color .3s; }
-    header, .quiz-container, footer { width: 100%; max-width: 700px; margin: 0 auto; padding: 10px; }
-    header { display: flex; justify-content: space-between; align-items: center; }
-    button { cursor: pointer; padding: 8px 16px; margin: 6px 0; }
-    .question { font-weight: bold; margin-top: 20px; }
-    .options { margin: 10px 0; }
-    .option-item { margin: 5px 0; }
-    .feedback { text-align: center; font-weight: bold; margin-top: 10px; padding: 10px; display: none; }
-    .feedback.correct { background-color: #c8e6c9; }
-    .feedback.incorrect { background-color: #ffcdd2; }
-    .feedback.partial { background-color: #fff9c4; }
-    #next-btn, #check-btn { margin-right: 10px; }
-    .hidden { display: none; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color .3s, color .3s;
+    }
 
-    .dark-mode { background-color: #222; color: #eee; }
-    .dark-mode .feedback.correct { background-color: #2e7d32; color: #fff; }
-    .dark-mode .feedback.incorrect { background-color: #c62828; color: #fff; }
-    .dark-mode .feedback.partial { background-color: #fbc02d; color: #000; }
+    header, .quiz-container, footer {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 10px;
+    }
 
-    .quiz-layout { border: 1px solid #ccc; margin-top: 20px; padding: 20px; }
-    .top-row { display: flex; justify-content: space-between; align-items: center; }
-    .timer { font-weight: bold; }
-    .navigation-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-    .score-container { text-align: center; margin: 20px 0; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button {
+      cursor: pointer;
+      padding: 8px 16px;
+      margin: 6px 0;
+    }
+
+    .question {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .options {
+      margin: 10px 0;
+    }
+
+    .option-item {
+      margin: 5px 0;
+    }
+
+    .feedback {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+      padding: 10px;
+      display: none;
+    }
+
+    .feedback.correct {
+      background-color: #c8e6c9;
+    }
+
+    .feedback.incorrect {
+      background-color: #ffcdd2;
+    }
+
+    .feedback.partial {
+      background-color: #fff9c4;
+    }
+
+    #next-btn, #check-btn {
+      margin-right: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .dark-mode {
+      background-color: #222;
+      color: #eee;
+    }
+
+    .dark-mode .feedback.correct {
+      background-color: #2e7d32;
+      color: #fff;
+    }
+
+    .dark-mode .feedback.incorrect {
+      background-color: #c62828;
+      color: #fff;
+    }
+
+    .dark-mode .feedback.partial {
+      background-color: #fbc02d;
+      color: #000;
+    }
+
+    .quiz-layout {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      padding: 20px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .timer {
+      font-weight: bold;
+    }
+
+    .navigation-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .score-container {
+      text-align: center;
+      margin: 20px 0;
+    }
   </style>
 </head>
 <body>
@@ -77,7 +167,7 @@
 
   <script>
     /******************************************************
-     * 1) CONFIGURATION & QUESTION DATA (inlined)
+     * 1) CONFIGURATION & QUESTION DATA
      ******************************************************/
     const config = {
       totalTime: 300,
@@ -86,116 +176,115 @@
 
     const questionPool = [
       {
-        "question": "What should you do if you receive an SMS with a “bank security alert” link? / 如果你收到短信说“银行安全警报”，并附带一个链接，你应该怎么做？",
-        "options": [
+        question: "What should you do if you receive an SMS with a “bank security alert” link? / 如果你收到短信说“银行安全警报”，并附带一个链接，你应该怎么做？",
+        options: [
           "A. Click the link immediately to “secure” your account / 立刻点击链接“保护账号”",
           "B. Reply with your bank password to verify / 回复你的网银密码进行验证",
           "C. Ignore the message and log in via the official app/website to check / 不点链接，改用官方App/官网登录核实",
           "D. Forward the message to friends to warn them / 转发给朋友提醒他们"
         ],
-        "correctAnswers": [2],
-        "type": "single"
+        correctAnswers: [2],
+        type: "single"
       },
       {
-        "question": "Which password practice is the safest for online accounts? / 以下哪种密码做法最安全？",
-        "options": [
+        question: "Which password practice is the safest for online accounts? / 以下哪种密码做法最安全？",
+        options: [
           "A. Use one password for all accounts / 所有账号用同一个密码",
           "B. Use a long unique password and a password manager / 用长且独特的密码，并使用密码管理器",
           "C. Use your birthday for easy memory / 用生日方便记",
           "D. Share your password with a close friend / 和好朋友共享密码"
         ],
-        "correctAnswers": [1],
-        "type": "single"
+        correctAnswers: [1],
+        type: "single"
       },
       {
-        "question": "What should you do with your OTP (one-time password)? / 你应该如何处理 OTP（一次性验证码）？",
-        "options": [
+        question: "What should you do with your OTP (one-time password)? / 你应该如何处理 OTP（一次性验证码）？",
+        options: [
           "A. Share it if the caller says “I’m the bank” / 对方说是银行就给",
           "B. Post it in a group chat for help / 发群里让大家帮忙看",
           "C. Never share it with anyone / 绝不与任何人分享",
           "D. Save it for later use / 保存起来以后再用"
         ],
-        "correctAnswers": [2],
-        "type": "single"
+        correctAnswers: [2],
+        type: "single"
       },
       {
-        "question": "Which sign suggests a website may be fake (phishing)? / 以下哪个迹象可能说明网站是假的（钓鱼网站）？",
-        "options": [
+        question: "Which sign suggests a website may be fake (phishing)? / 以下哪个迹象可能说明网站是假的（钓鱼网站）？",
+        options: [
           "A. The URL is slightly misspelled (e.g., “mybnak.com”) / 网址拼写怪怪的（如 mybnak.com）",
           "B. It pressures you with “act now” threats / 用“立刻操作否则封号”恐吓你",
           "C. It asks for password/OTP on a link from SMS / 通过短信链接让你输入密码/OTP",
           "D. All of the above / 以上都是"
         ],
-        "correctAnswers": [3],
-        "type": "single"
+        correctAnswers: [3],
+        type: "single"
       },
       {
-        "question": "What is the safest action if a “bank officer” calls about suspicious transfers? / 如果“银行职员”来电说你有可疑转账，最安全的做法是？",
-        "options": [
+        question: "What is the safest action if a “bank officer” calls about suspicious transfers? / 如果“银行职员”来电说你有可疑转账，最安全的做法是？",
+        options: [
           "A. Stay on the line and follow instructions / 不挂电话照做",
           "B. Hang up and call the bank using the official number / 挂断后用官方号码回拨银行",
           "C. Give your account number + OTP to “freeze funds” / 给账号和OTP“冻结资金”",
           "D. Install a remote-control app to “check security” / 安装远程控制软件“检查安全”"
         ],
-        "correctAnswers": [1],
-        "type": "single"
+        correctAnswers: [1],
+        type: "single"
       },
       {
-        "question": "Why is using public Wi-Fi for banking risky? / 为什么用公共 Wi-Fi 做网银操作有风险？",
-        "options": [
+        question: "Why is using public Wi-Fi for banking risky? / 为什么用公共 Wi-Fi 做网银操作有风险？",
+        options: [
           "A. Attackers can intercept data on insecure networks / 不安全网络可能被拦截数据",
           "B. Fake “free Wi-Fi” hotspots can be scams / 可能连到假热点",
           "C. You may forget to log out on shared devices / 容易忘记登出",
           "D. All of the above / 以上都是"
         ],
-        "correctAnswers": [3],
-        "type": "single"
+        correctAnswers: [3],
+        type: "single"
       },
       {
-        "question": "Which is a safe way to handle a “refund” message? / 收到“退款”消息时，哪种处理方式更安全？",
-        "options": [
+        question: "Which is a safe way to handle a “refund” message? / 收到“退款”消息时，哪种处理方式更安全？",
+        options: [
           "A. Click the refund link to fill your card details / 点退款链接填卡资料",
           "B. Only process refunds inside the official app/platform / 只在官方App/平台内办理退款",
           "C. Transfer “processing fees” to get the refund / 先转手续费才能退款",
           "D. Share your banking login to speed things up / 把网银账号给对方加速"
         ],
-        "correctAnswers": [1],
-        "type": "single"
+        correctAnswers: [1],
+        type: "single"
       },
       {
-        "question": "Which message is most likely a job scam? / 以下哪种更像兼职诈骗？",
-        "options": [
+        question: "Which message is most likely a job scam? / 以下哪种更像兼职诈骗？",
+        options: [
           "A. “Easy job! Earn RM500/day. Pay a deposit to start.” / “轻松日赚RM500，先交押金入职”",
           "B. “Interview scheduled via official HR email domain.” / “用公司官方邮箱安排面试”",
           "C. “Salary details provided after formal contract.” / “签正式合同后提供薪资细节”",
           "D. “Apply through company career website.” / “通过公司官网投递”"
         ],
-        "correctAnswers": [0],
-        "type": "single"
+        correctAnswers: [0],
+        type: "single"
       },
       {
-        "question": "What should you do before scanning a QR code from a poster? / 扫描海报上的二维码前，你应该先做什么？",
-        "options": [
+        question: "What should you do before scanning a QR code from a poster? / 扫描海报上的二维码前，你应该先做什么？",
+        options: [
           "A. Scan first, think later / 先扫再说",
           "B. Check if it’s from an official/verified source / 看是否来自官方或可信来源",
           "C. Share it to friends to test / 先发给朋友试",
           "D. Enter your bank details if asked / 若要求就填网银资料"
         ],
-        "correctAnswers": [1],
-        "type": "single"
+        correctAnswers: [1],
+        type: "single"
       },
       {
-        "question": "If someone asks you to “borrow your bank account” to receive money, what is the risk? / 如果有人要“借用你的银行账户收钱”，风险是什么？",
-        "options": [
+        question: "If someone asks you to “borrow your bank account” to receive money, what is the risk? / 如果有人要“借用你的银行账户收钱”，风险是什么？",
+        options: [
           "A. No risk if you trust them / 信任就没风险",
           "B. You could become a money mule and face legal trouble / 可能变成“跑分/人头户”，惹上法律问题",
           "C. You will get free rewards / 会得到免费奖励",
           "D. Banks encourage this / 银行鼓励这样做"
         ],
-        "correctAnswers": [1],
-        "type": "single"
+        correctAnswers: [1],
+        type: "single"
       }
-      // 你可以把你剩下的题继续粘贴到这里（保持同样格式）
     ];
 
     /******************************************************
@@ -211,18 +300,18 @@
     /******************************************************
      * 3) DOM ELEMENTS
      ******************************************************/
-    const timerEl              = document.getElementById('timer');
-    const questionTextEl       = document.getElementById('question-text');
-    const optionsContainerEl   = document.getElementById('options-container');
-    const feedbackEl           = document.getElementById('feedback');
-    const nextBtn              = document.getElementById('next-btn');
-    const checkBtn             = document.getElementById('check-btn');
-    const themeToggleBtn       = document.getElementById('theme-toggle');
-    const scoreContainerEl     = document.getElementById('score-container');
-    const scorePercentEl       = document.getElementById('score-percent');
-    const accuracyLineEl       = document.getElementById('accuracy-line');
-    const completionCountEl    = document.getElementById('completion-count');
-    const overallAccuracyEl    = document.getElementById('overall-accuracy');
+    const timerEl = document.getElementById('timer');
+    const questionTextEl = document.getElementById('question-text');
+    const optionsContainerEl = document.getElementById('options-container');
+    const feedbackEl = document.getElementById('feedback');
+    const nextBtn = document.getElementById('next-btn');
+    const checkBtn = document.getElementById('check-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const scoreContainerEl = document.getElementById('score-container');
+    const scorePercentEl = document.getElementById('score-percent');
+    const accuracyLineEl = document.getElementById('accuracy-line');
+    const completionCountEl = document.getElementById('completion-count');
+    const overallAccuracyEl = document.getElementById('overall-accuracy');
     const questionsRemainingEl = document.getElementById('questions-remaining');
 
     /******************************************************
@@ -271,7 +360,6 @@
       const q = selectedQuestions[currentIndex];
 
       questionTextEl.innerHTML = formatTextForHTML(q.question);
-
       optionsContainerEl.innerHTML = '';
       feedbackEl.textContent = '';
       feedbackEl.style.display = 'none';
@@ -384,134 +472,133 @@
       renderQuestion();
     });
 
-   
-    <script>
-/******************************************************
- * 10) COUNTERS (CounterAPI via JSONP)
- ******************************************************/
-const COUNTER_NS = 'lin313020.github.io';
-const COUNTER_ACTION = 'anti-scam';
+    /******************************************************
+     * 10) COUNTERS (CounterAPI via JSONP)
+     ******************************************************/
+    const COUNTER_NS = 'lin313020.github.io';
+    const COUNTER_ACTION = 'anti-scam';
 
-const KEY_COMPLETIONS   = 'completed';
-const KEY_TOTAL_CORRECT = 'total-correct';
-const KEY_TOTAL_QUEST   = 'total-questions';
+    const KEY_COMPLETIONS = 'completed';
+    const KEY_TOTAL_CORRECT = 'total-correct';
+    const KEY_TOTAL_QUEST = 'total-questions';
 
-const COUNT_ONCE_PER_DEVICE = false;
-const ONCE_FLAG_KEY = 'anti_scam_done_v4';
+    const COUNT_ONCE_PER_DEVICE = false;
+    const ONCE_FLAG_KEY = 'anti_scam_done_v4';
 
-function counterApiUrl(key, params = '') {
-  const base = `https://counterapi.com/api/${encodeURIComponent(COUNTER_NS)}/${encodeURIComponent(COUNTER_ACTION)}/${encodeURIComponent(key)}`;
-  if (!params) return base;
-  return base + (params.startsWith('?') ? params : ('?' + params));
-}
-
-function counterRequestJSONP(key, params = '') {
-  return new Promise((resolve, reject) => {
-    const cbName = 'counterCb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    const script = document.createElement('script');
-
-    let finished = false;
-
-    function cleanup() {
-      if (finished) return;
-      finished = true;
-      try { delete window[cbName]; } catch (_) {}
-      if (script.parentNode) script.parentNode.removeChild(script);
+    function counterApiUrl(key, params = '') {
+      const base = `https://counterapi.com/api/${encodeURIComponent(COUNTER_NS)}/${encodeURIComponent(COUNTER_ACTION)}/${encodeURIComponent(key)}`;
+      if (!params) return base;
+      return base + (params.startsWith('?') ? params : ('?' + params));
     }
 
-    const timeout = setTimeout(() => {
-      cleanup();
-      reject(new Error('CounterAPI timeout'));
-    }, 10000);
+    function counterRequestJSONP(key, params = '') {
+      return new Promise((resolve, reject) => {
+        const cbName = 'counterCb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+        const script = document.createElement('script');
 
-    window[cbName] = function (data) {
-      clearTimeout(timeout);
-      cleanup();
-      resolve(data);
-    };
+        let finished = false;
 
-    script.onerror = function () {
-      clearTimeout(timeout);
-      cleanup();
-      reject(new Error('CounterAPI JSONP request failed'));
-    };
+        function cleanup() {
+          if (finished) return;
+          finished = true;
+          try { delete window[cbName]; } catch (_) {}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
 
-    let url = counterApiUrl(key, params);
-    url += (url.includes('?') ? '&' : '?') + 'callback=' + encodeURIComponent(cbName);
-    url += '&_=' + Date.now();
+        const timeout = setTimeout(() => {
+          cleanup();
+          reject(new Error('CounterAPI timeout'));
+        }, 10000);
 
-    script.src = url;
-    script.async = true;
-    document.head.appendChild(script);
-  });
-}
+        window[cbName] = function (data) {
+          clearTimeout(timeout);
+          cleanup();
+          resolve(data);
+        };
 
-async function counterGet(key) {
-  return await counterRequestJSONP(key, 'readOnly=true');
-}
+        script.onerror = function () {
+          clearTimeout(timeout);
+          cleanup();
+          reject(new Error('CounterAPI JSONP request failed'));
+        };
 
-async function counterInc(key, times = 1) {
-  if (times <= 0) return;
-  for (let i = 0; i < times; i++) {
-    await counterRequestJSONP(key);
-  }
-}
+        let url = counterApiUrl(key, params);
+        url += (url.includes('?') ? '&' : '?') + 'callback=' + encodeURIComponent(cbName);
+        url += '&_=' + Date.now();
 
-async function updateCounters(correctThisAttempt, totalThisAttempt) {
-  if (completionCountEl) {
-    completionCountEl.textContent = 'Total completions: ...';
-  }
-  if (overallAccuracyEl) {
-    overallAccuracyEl.textContent = 'Overall accuracy (all completions): ...';
-  }
-
-  let shouldCount = true;
-
-  if (COUNT_ONCE_PER_DEVICE) {
-    shouldCount = !localStorage.getItem(ONCE_FLAG_KEY);
-    if (shouldCount) {
-      localStorage.setItem(ONCE_FLAG_KEY, '1');
-    }
-  }
-
-  try {
-    if (shouldCount) {
-      await counterInc(KEY_COMPLETIONS, 1);
-      await counterInc(KEY_TOTAL_CORRECT, correctThisAttempt);
-      await counterInc(KEY_TOTAL_QUEST, totalThisAttempt);
+        script.src = url;
+        script.async = true;
+        document.head.appendChild(script);
+      });
     }
 
-    const [completions, totalCorrect, totalQuest] = await Promise.all([
-      counterGet(KEY_COMPLETIONS),
-      counterGet(KEY_TOTAL_CORRECT),
-      counterGet(KEY_TOTAL_QUEST)
-    ]);
-
-    const cN = Number(completions && completions.value ? completions.value : 0);
-    const c  = Number(totalCorrect && totalCorrect.value ? totalCorrect.value : 0);
-    const t  = Number(totalQuest && totalQuest.value ? totalQuest.value : 0);
-
-    if (completionCountEl) {
-      completionCountEl.textContent = `Total completions: ${cN}`;
+    async function counterGet(key) {
+      return await counterRequestJSONP(key, 'readOnly=true');
     }
 
-    if (overallAccuracyEl) {
-      overallAccuracyEl.textContent = t > 0
-        ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}% (${c}/${t})`
-        : 'Overall accuracy (all completions): 0.00% (0/0)';
+    async function counterInc(key, times = 1) {
+      if (times <= 0) return;
+      for (let i = 0; i < times; i++) {
+        await counterRequestJSONP(key);
+      }
     }
-  } catch (e) {
-    console.error('Counter update failed:', e);
 
-    if (completionCountEl) {
-      completionCountEl.textContent = 'Total completions: (unavailable)';
+    async function updateCounters(correctThisAttempt, totalThisAttempt) {
+      if (completionCountEl) {
+        completionCountEl.textContent = 'Total completions: ...';
+      }
+
+      if (overallAccuracyEl) {
+        overallAccuracyEl.textContent = 'Overall accuracy (all completions): ...';
+      }
+
+      let shouldCount = true;
+
+      if (COUNT_ONCE_PER_DEVICE) {
+        shouldCount = !localStorage.getItem(ONCE_FLAG_KEY);
+        if (shouldCount) {
+          localStorage.setItem(ONCE_FLAG_KEY, '1');
+        }
+      }
+
+      try {
+        if (shouldCount) {
+          await counterInc(KEY_COMPLETIONS, 1);
+          await counterInc(KEY_TOTAL_CORRECT, correctThisAttempt);
+          await counterInc(KEY_TOTAL_QUEST, totalThisAttempt);
+        }
+
+        const [completions, totalCorrect, totalQuest] = await Promise.all([
+          counterGet(KEY_COMPLETIONS),
+          counterGet(KEY_TOTAL_CORRECT),
+          counterGet(KEY_TOTAL_QUEST)
+        ]);
+
+        const cN = Number(completions && completions.value ? completions.value : 0);
+        const c = Number(totalCorrect && totalCorrect.value ? totalCorrect.value : 0);
+        const t = Number(totalQuest && totalQuest.value ? totalQuest.value : 0);
+
+        if (completionCountEl) {
+          completionCountEl.textContent = `Total completions: ${cN}`;
+        }
+
+        if (overallAccuracyEl) {
+          overallAccuracyEl.textContent = t > 0
+            ? `Overall accuracy (all completions): ${((c / t) * 100).toFixed(2)}% (${c}/${t})`
+            : 'Overall accuracy (all completions): 0.00% (0/0)';
+        }
+      } catch (e) {
+        console.error('Counter update failed:', e);
+
+        if (completionCountEl) {
+          completionCountEl.textContent = 'Total completions: (unavailable)';
+        }
+
+        if (overallAccuracyEl) {
+          overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
+        }
+      }
     }
-    if (overallAccuracyEl) {
-      overallAccuracyEl.textContent = 'Overall accuracy (all completions): (unavailable)';
-    }
-  }
-}
-</script>
 
     /******************************************************
      * 11) END QUIZ
@@ -525,8 +612,7 @@ async function updateCounters(correctThisAttempt, totalThisAttempt) {
       const finalScore = (userScore / total) * 100;
 
       scorePercentEl.textContent = finalScore.toFixed(2) + '%';
-      if (accuracyLineEl) accuracyLineEl.textContent = `Correct: ${fullCorrect}/${total}`;
-
+      accuracyLineEl.textContent = `Correct: ${fullCorrect}/${total}`;
       scoreContainerEl.classList.remove('hidden');
 
       updateCounters(fullCorrect, total);
@@ -536,10 +622,15 @@ async function updateCounters(correctThisAttempt, totalThisAttempt) {
      * 12) TIMER
      ******************************************************/
     function updateTimer() {
-      if (timeRemaining <= 0) { endQuiz(); return; }
+      if (timeRemaining <= 0) {
+        endQuiz();
+        return;
+      }
+
       timeRemaining--;
       const minutes = Math.floor(timeRemaining / 60);
       let seconds = timeRemaining % 60;
+
       if (seconds < 10) seconds = '0' + seconds;
       timerEl.textContent = `Time: ${minutes}:${seconds}`;
     }
